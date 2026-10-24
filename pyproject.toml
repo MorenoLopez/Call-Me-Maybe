@@ -1,0 +1,19 @@
+[project]
+name = "call-me-maybe"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "MorenoLopez", email = "moreno.rarivo@gmail.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2.14.1",
+]
+
+[project.scripts]
+call-me-maybe = "call_me_maybe:main"
+
+[build-system]
+requires = ["uv_build>=0.12.3,<0.13.0"]
+build-backend = "uv_build"
