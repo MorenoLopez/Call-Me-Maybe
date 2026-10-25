@@ -7,7 +7,7 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/20 11:49:44 by horarivo            #+#    #+#            #
-#   Updated: 2026/10/25 08:44:48 by horarivo           ###   ########.fr      #
+#   Updated: 2026/10/25 09:05:10 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -20,7 +20,7 @@ JsonType = Literal["boolean", "number", "string"]
 
 class Parameter(BaseModel):
     """function parameter"""
-    type: JsonTypes
+    type: JsonType
 
 
 class ReturnType(BaseModel):
