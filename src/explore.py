@@ -1,23 +1,20 @@
+import json
+
 from llm_sdk import Small_LLM_Model
 
-def main():
-    prompt = "Hello"
-    model = Small_LLM_Model()
-    
-    ids = list(model.encode(prompt).squeeze().tolist())
-    print(ids)
-    
-    logits = model.get_logits_from_input_ids(ids[0])
-    print(len(logits))
-    
-    next =  logits.index(max(logits))
-    print(next)
-    
-    decoded = model.decode(next)
-    print(decoded)
-    
-    print(model.decode(ids + [next]))
+model = Small_LLM_Model()
+path = model.get_path_to_vocab_file()
+print("path:", path)
 
+with open(path, "r", encoding="utf-8") as f:
+    vocab = json.load(f)
 
-if __name__ == "__main__":
-    main()
+print("type:", type(vocab))
+print("size:", len(vocab))
+
+if isinstance(vocab, dict):
+    print("first 10:", list(vocab.items())[:10])
+    for key in ["{", '"', "1", "Ġthe", " the"]:
+        print(repr(key), "->", vocab.get(key))
+else:
+    print("first 10:", vocab[:10])
