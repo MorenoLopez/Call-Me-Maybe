@@ -7,7 +7,7 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/20 09:42:35 by horarivo            #+#    #+#            #
-#   Updated: 2026/10/25 09:12:13 by horarivo           ###   ########.fr      #
+#   Updated: 2026/10/25 09:14:45 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -61,8 +61,8 @@ def main() -> int:
         functions = validate(json_load(args.functions_definition), FunctionDefinition)
         prompts = validate(json_load(args.input), Prompt)
         print("\n\n\n")
-        for item in functions:
-            print(item)
+        for func in functions:
+            print(func)
         print("\n\n\n")
         for p in prompts:
             print(p)
