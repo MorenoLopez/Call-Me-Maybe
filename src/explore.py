@@ -1,20 +1,18 @@
-import json
+import time
 
 from llm_sdk import Small_LLM_Model
+from vocab import Vocab
 
 model = Small_LLM_Model()
-path = model.get_path_to_vocab_file()
-print("path:", path)
 
-with open(path, "r", encoding="utf-8") as f:
-    vocab = json.load(f)
+start = time.time()
+vocab = Vocab.build(model)
+print(f"built in {time.time() - start:.1f}s, {len(vocab.id_to_text)} usable")
 
-print("type:", type(vocab))
-print("size:", len(vocab))
+sentence = "Hello é\nworld 42"
+ids = model.encode(sentence).squeeze(0).tolist()
+rebuilt = "".join(vocab.text_of(i) for i in ids)
+print(repr(rebuilt), rebuilt == sentence)
 
-if isinstance(vocab, dict):
-    print("first 10:", list(vocab.items())[:10])
-    for key in ["{", '"', "1", "Ġthe", " the"]:
-        print(repr(key), "->", vocab.get(key))
-else:
-    print("first 10:", vocab[:10])
+logits = model.get_logits_from_input_ids(ids)
+print("logits:", len(logits), "max id:", max(vocab.id_to_text))
