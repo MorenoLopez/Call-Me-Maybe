@@ -13,6 +13,7 @@
 
 install:
 	uv sync
+
 test:
 	uv run python src/explore.py --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calls.json
 

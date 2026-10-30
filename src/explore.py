@@ -5,20 +5,28 @@
 ############
 
 import time
+from pathlib import Path
 
 from llm_sdk import Small_LLM_Model
+from constrained import build_text_index, choose_function
+from utils import json_load, validate
+from models import FunctionDefinition, Prompt
 from vocab import Vocab
 
 model = Small_LLM_Model()
-
-start = time.time()
 vocab = Vocab.build(model)
-print(f"built in {time.time() - start:.1f}s, {len(vocab.id_to_text)} usable")
+index = build_text_index(vocab)
 
-sentence = "Hello é\nworld 42"
-ids = model.encode(sentence).squeeze(0).tolist()
-rebuilt = "".join(vocab.text_of(i) for i in ids)
-print(repr(rebuilt), rebuilt == sentence)
+functions = validate(
+    json_load(Path("data/input/functions_definition.json")),
+    FunctionDefinition,
+)
+prompts = validate(
+    json_load(Path("data/input/function_calling_tests.json")),
+    Prompt,
+)
 
-logits = model.get_logits_from_input_ids(ids)
-print("logits:", len(logits), "max id:", max(vocab.id_to_text))
+for p in prompts:
+    start = time.time()
+    name = choose_function(model, vocab, index, functions, p.prompt)
+    print(f"{p.prompt!r} -> {name}  ({time.time() - start:.1f}s)")
