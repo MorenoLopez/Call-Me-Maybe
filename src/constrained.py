@@ -1,5 +1,36 @@
+#!/usr/bin/env python3
+# ########################################################################### #
+#   shebang: 1                                                                #
+#                                                          :::      ::::::::  #
+#   constrained.py                                       :+:      :+:    :+:  #
+#                                                      +:+ +:+         +:+    #
+#   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
+#                                                  +#+#+#+#+#+   +#+          #
+#   Created: 2026/10/31 18:29:49 by horarivo            #+#    #+#            #
+#   Updated: 2026/11/01 07:47:29 by horarivo           ###   ########.fr      #
+#                                                                             #
+# ########################################################################### #
+
 
 import numpy as np
+from models import FunctionDefinition
+
+
+def build_context(functions: list[FunctionDefinition], prompt: str) -> str:
+    lines = [
+        "Pick the function that best answers the user request.",
+        "",
+        "Available functions:",
+    ]
+    for f in functions:
+        params = ", ".join(f"{n}: {p.type}" for n, p in f.parameters.items())
+        lines.append(f"- {f.name}({params}): {f.description}")
+    lines += ["", f"User request: {prompt}", "", "Function to call:", ""]
+    print(f"""
+        {params}
+        {lines}
+    """)
+    return "\n".join(lines)
 
 def build_text_index(vocab) -> dict[str, list[int]]:
     """ done ONCE at startup: token text -> all ids having that text """
@@ -11,7 +42,7 @@ def build_text_index(vocab) -> dict[str, list[int]]:
 
 def choose_function(model, vocab, index, functions, prompt) -> str:
     names = [f.name for f in functions]
-    context_ids = model.encode(build_context(functions, prompt)).squeeze(0).tolist()  # plain list of ints
+    context_ids = model.encode(build_context(functions, prompt)).squeeze(0).tolist()
     gen_name = ""
 
     while True:
