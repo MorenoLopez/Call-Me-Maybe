@@ -6,7 +6,7 @@
 #    By: horarivo <horarivo@student.42antananari    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/10/20 09:58:02 by horarivo          #+#    #+#              #
-#    Updated: 2026/10/23 06:59:11 by horarivo         ###   ########.fr        #
+#    Updated: 2026/11/01 18:11:43 by horarivo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ install:
 	uv sync
 
 test:
-	uv run python src/explore.py --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calls.json
+	uv run python src/test.py --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calls.json
 
 run:
 	uv run python -m src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calls.json

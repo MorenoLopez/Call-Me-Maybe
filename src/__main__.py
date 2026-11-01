@@ -7,24 +7,28 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/20 09:42:35 by horarivo            #+#    #+#            #
-#   Updated: 2026/10/26 07:47:38 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/01 18:18:50 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
-"""entry file"""
+"""Entry point of the function calling tool."""
 
 import argparse
+import json
 import sys
+import time
 from pathlib import Path
+
+from llm_sdk import Small_LLM_Model
+
+from .models import FunctionDefinition, Output, Prompt
+from .constrained import TokenSets, process_prompt
 from .utils import json_load, validate
-from .models import Prompt, FunctionDefinition
+from .vocab import Vocab
+
 
 def get_args() -> argparse.Namespace:
-    """Parse the command line arguments.
-
-    Returns:
-        The parsed arguments.
-    """
+    """Parse the command line arguments."""
     parser = argparse.ArgumentParser(
         prog="python -m src",
         description="Translate natural language prompts into function calls.",
@@ -50,26 +54,64 @@ def get_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def write_results(path: Path, results: list[Output]) -> None:
+    """Write the results as a JSON array, creating the folder if needed."""
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with open(path, "w", encoding="utf-8") as file:
+            json.dump(
+                [r.model_dump() for r in results],
+                file,
+                indent=4,
+                ensure_ascii=False,
+            )
+    except OSError as err:
+        raise ValueError(f"cannot write {path}: {err}") from None
+
+
 def main() -> int:
-    """Run the program
+    """Run the program.
 
     Returns:
         The exit code (0 on success, 1 on error).
     """
     args = get_args()
     try:
-        functions = validate(json_load(args.functions_definition), FunctionDefinition)
+        functions = validate(
+            json_load(args.functions_definition), FunctionDefinition
+        )
         prompts = validate(json_load(args.input), Prompt)
-        for func in functions:
-            print(func)
-        print("\n")
-        for p in prompts:
-            print(p)
-    except Exception as e:
-        print(f"[ Error] : {e}", file=sys.stderr)
+        if not functions:
+            raise ValueError("no function in the definitions file")
+        model = Small_LLM_Model()
+        vocab = Vocab.build(model)
+        tokens = TokenSets.build(vocab)
+    except Exception as err:
+        print(f"[ Error] : {err}", file=sys.stderr)
         return 1
-    print("\n\n - [ Everything looks good ]")
-    return 0
 
-if __name__=="__main__":
+    results: list[Output] = []
+    start = time.time()
+    for i, p in enumerate(prompts, 1):
+        try:
+            out = process_prompt(model, vocab, tokens, functions, p.prompt)
+        except Exception as err:
+            print(f"[ Error] prompt {i} skipped: {err}", file=sys.stderr)
+            continue
+        results.append(out)
+        print(f"[{i}/{len(prompts)}] {p.prompt!r} -> {out.name}")
+
+    try:
+        write_results(args.output, results)
+    except ValueError as err:
+        print(f"[ Error] : {err}", file=sys.stderr)
+        return 1
+    print(
+        f"{len(results)}/{len(prompts)} prompts done in "
+        f"{time.time() - start:.1f}s -> {args.output}"
+    )
+    return 0 if len(results) == len(prompts) else 1
+
+
+if __name__ == "__main__":
     sys.exit(main())

@@ -8,10 +8,10 @@ import time
 from pathlib import Path
 
 from llm_sdk import Small_LLM_Model
-from constrained import build_text_index, choose_function
 from utils import json_load, validate
 from models import FunctionDefinition, Prompt
 from vocab import Vocab
+from constrained import TokenSets, process_prompt
 
 model = Small_LLM_Model()
 vocab = Vocab.build(model)
@@ -26,7 +26,8 @@ prompts = validate(
     Prompt,
 )
 
+tokens = TokenSets.build(vocab)
 for p in prompts:
     start = time.time()
-    name = choose_function(model, vocab, index, functions, p.prompt)
-    print(f"{p.prompt!r} -> {name}  ({time.time() - start:.1f}s)")
+    out = process_prompt(model, vocab, tokens, functions, p.prompt)
+    print(out.model_dump(), f"({time.time() - start:.1f}s)")
