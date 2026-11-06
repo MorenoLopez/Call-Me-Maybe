@@ -7,7 +7,7 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/31 18:29:49 by horarivo            #+#    #+#            #
-#   Updated: 2026/11/02 08:39:13 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/06 17:18:00 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -79,19 +79,32 @@ class TokenSets(BaseModel):
         )
 
 
+# def build_context(functions: list[FunctionDefinition], prompt: str) -> str:
+#     """Build the text given to the model before the answer."""
+#     system = [
+#         "Choose the function that best answers the user request.",
+#         "",
+#         "Available functions:",
+#     ]
+#     for f in functions:
+#         params = ", ".join(f"{n}: {p.type}" for n, p in f.parameters.items())
+#         system.append(f"- {f.name}({params}): {f.description}")
+#     system += ["", f"User request: {prompt}", "", "Function to call:", ""]
+#     return "\n".join(system)
+
 def build_context(functions: list[FunctionDefinition], prompt: str) -> str:
-    """Build the text given to the model before the answer."""
-    lines = [
-        "Choose the function that best answers the user request.",
-        "",
-        "Available functions:",
-    ]
+    """Build the ChatML-formatted prompt."""
+    system = "Choose the function that best answers the user request.\n\nAvailable functions:\n"
     for f in functions:
         params = ", ".join(f"{n}: {p.type}" for n, p in f.parameters.items())
-        lines.append(f"- {f.name}({params}): {f.description}")
-    lines += ["", f"User request: {prompt}", "", "Function to call:", ""]
-    return "\n".join(lines)
+        system += f"- {f.name}({params}): {f.description}\n"
 
+    # Format ChatML de Qwen3 (enable_thinking=False)
+    return (
+        f"system\n{system}\n\n"
+        f"user\nUser request: {prompt}\n\n"
+        f"assistant\n\n\n\n"
+    )   
 
 def append_text(
     model: Small_LLM_Model, context_ids: list[int], text: str
