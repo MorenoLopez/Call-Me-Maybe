@@ -4,10 +4,10 @@
 #                                                          :::      ::::::::  #
 #   __main__.py                                          :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
+#   By: horarivo <horarivo@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/20 09:42:35 by horarivo            #+#    #+#            #
-#   Updated: 2026/11/01 18:18:50 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/06 16:39:26 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
