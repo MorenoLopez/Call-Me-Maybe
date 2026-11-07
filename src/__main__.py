@@ -4,10 +4,10 @@
 #                                                          :::      ::::::::  #
 #   __main__.py                                          :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: horarivo <horarivo@student.42.fr>            +#+  +:+       +#+       #
+#   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/20 09:42:35 by horarivo            #+#    #+#            #
-#   Updated: 2026/11/06 16:39:26 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/07 08:06:00 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -21,10 +21,16 @@ from pathlib import Path
 
 from llm_sdk import Small_LLM_Model
 
-from .models import FunctionDefinition, Output, Prompt
 from .constrained import TokenSets, process_prompt
+from .models import FunctionDefinition, Output, Prompt
 from .utils import json_load, validate
 from .vocab import Vocab
+
+CYAN = "\033[96m"
+GREEN = "\033[92m"
+YELLOW = "\033[93m"
+RED = "\033[91m"
+RESET = "\033[0m"
 
 
 def get_args() -> argparse.Namespace:
@@ -69,12 +75,15 @@ def write_results(path: Path, results: list[Output]) -> None:
         raise ValueError(f"cannot write {path}: {err}") from None
 
 
-def main() -> int:
-    """Run the program.
+def print_result(i: int, total: int, out: Output) -> None:
+    """Print one result as a colored JSON block."""
+    block = json.dumps(out.model_dump(), indent=4, ensure_ascii=False)
+    for key in ("prompt", "name", "parameters"):
+        block = block.replace(f'"{key}"', f'{CYAN}"{key}"{RESET}')
+    print(f"\n{YELLOW}[{i}/{total}]{RESET}")
+    print(block)
 
-    Returns:
-        The exit code (0 on success, 1 on error).
-    """
+def main() -> int:
     args = get_args()
     try:
         functions = validate(
@@ -86,29 +95,44 @@ def main() -> int:
         model = Small_LLM_Model()
         vocab = Vocab.build(model)
         tokens = TokenSets.build(vocab)
+    except KeyboardInterrupt:
+        print(f"\n{YELLOW}Interrupted.{RESET}", file=sys.stderr)
+        return 130
     except Exception as err:
-        print(f"[ Error] : {err}", file=sys.stderr)
+        print(f"{RED}[ Error]{RESET} : {err}", file=sys.stderr)
         return 1
 
     results: list[Output] = []
     start = time.time()
-    for i, p in enumerate(prompts, 1):
-        try:
-            out = process_prompt(model, vocab, tokens, functions, p.prompt)
-        except Exception as err:
-            print(f"[ Error] prompt {i} skipped: {err}", file=sys.stderr)
-            continue
-        results.append(out)
-        print(f"[{i}/{len(prompts)}] {p.prompt!r} -> {out.name}")
+    try:
+        for i, p in enumerate(prompts, 1):
+            try:
+                out = process_prompt(model, vocab, tokens, functions, p.prompt)
+            except Exception as err:
+                print(
+                    f"{RED}[ Error]{RESET} prompt {i} skipped: {err}",
+                    file=sys.stderr,
+                )
+                continue
+            results.append(out)
+            print_result(i, len(prompts), out)
+    except KeyboardInterrupt:
+        print(f"\n{YELLOW}Interrupted after {i - 1} prompt(s).{RESET}", file=sys.stderr)
+
+    if not results:
+        return 130
 
     try:
         write_results(args.output, results)
     except ValueError as err:
-        print(f"[ Error] : {err}", file=sys.stderr)
+        print(f"{RED}[ Error]{RESET} : {err}", file=sys.stderr)
         return 1
+
+    elapsed = time.time() - start
+    status = GREEN if len(results) == len(prompts) else YELLOW
     print(
-        f"{len(results)}/{len(prompts)} prompts done in "
-        f"{time.time() - start:.1f}s -> {args.output}"
+        f"\n{status}{len(results)}/{len(prompts)} prompts done "
+        f"in {elapsed:.1f}s{RESET} -> {args.output}"
     )
     return 0 if len(results) == len(prompts) else 1
 

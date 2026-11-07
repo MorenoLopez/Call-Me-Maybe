@@ -7,7 +7,7 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/31 18:29:49 by horarivo            #+#    #+#            #
-#   Updated: 2026/11/06 17:18:00 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/07 07:11:32 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -94,17 +94,22 @@ class TokenSets(BaseModel):
 
 def build_context(functions: list[FunctionDefinition], prompt: str) -> str:
     """Build the ChatML-formatted prompt."""
-    system = "Choose the function that best answers the user request.\n\nAvailable functions:\n"
+    system = (
+        "Choose the function that best answers "
+        "the user request.\n\n"
+        "Available functions:\n"
+    )
     for f in functions:
         params = ", ".join(f"{n}: {p.type}" for n, p in f.parameters.items())
         system += f"- {f.name}({params}): {f.description}\n"
 
     # Format ChatML de Qwen3 (enable_thinking=False)
     return (
-        f"system\n{system}\n\n"
-        f"user\nUser request: {prompt}\n\n"
-        f"assistant\n\n\n\n"
-    )   
+        f"<|im_start|>system\n{system}<|im_end|>\n"
+        f"<|im_start|>user\nUser request: {prompt}<|im_end|>\n"
+        f"<|im_start|>assistant\n<think>\n\n</think>\n\n"
+    )
+
 
 def append_text(
     model: Small_LLM_Model, context_ids: list[int], text: str

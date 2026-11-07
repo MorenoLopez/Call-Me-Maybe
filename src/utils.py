@@ -7,7 +7,7 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/20 15:58:49 by horarivo            #+#    #+#            #
-#   Updated: 2026/11/02 08:39:09 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/07 06:26:44 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -15,6 +15,7 @@
 import json
 from pathlib import Path
 from typing import Any
+
 
 def json_load(path: Path) -> list[Any]:
     """Load JSON file"""
@@ -30,6 +31,7 @@ def json_load(path: Path) -> list[Any]:
     if not isinstance(data, list):
         raise ValueError(f"{path} must contain a JSON array")
     return data
+
 
 def validate(data, model) -> list[Any]:
     """validate entry"""
