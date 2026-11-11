@@ -7,7 +7,7 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/20 15:58:49 by horarivo            #+#    #+#            #
-#   Updated: 2026/11/07 06:26:44 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/11 14:16:00 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -15,6 +15,7 @@
 import json
 from pathlib import Path
 from typing import Any
+from pydantic import BaseModel
 
 
 def json_load(path: Path) -> list[Any]:
@@ -33,7 +34,7 @@ def json_load(path: Path) -> list[Any]:
     return data
 
 
-def validate(data, model) -> list[Any]:
+def validate(data: list[Any], model: type[BaseModel]) -> list[Any]:
     """validate entry"""
     res = []
     for item in data:

@@ -7,7 +7,7 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/20 09:42:35 by horarivo            #+#    #+#            #
-#   Updated: 2026/11/07 08:06:00 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/11 14:03:50 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -83,6 +83,7 @@ def print_result(i: int, total: int, out: Output) -> None:
     print(f"\n{YELLOW}[{i}/{total}]{RESET}")
     print(block)
 
+
 def main() -> int:
     args = get_args()
     try:
@@ -117,7 +118,8 @@ def main() -> int:
             results.append(out)
             print_result(i, len(prompts), out)
     except KeyboardInterrupt:
-        print(f"\n{YELLOW}Interrupted after {i - 1} prompt(s).{RESET}", file=sys.stderr)
+        print(f"\n{YELLOW}Interrupted after {i - 1} prompt(s).{RESET}",
+              file=sys.stderr)
 
     if not results:
         return 130

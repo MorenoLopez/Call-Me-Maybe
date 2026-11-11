@@ -7,7 +7,7 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/31 18:29:49 by horarivo            #+#    #+#            #
-#   Updated: 2026/11/07 07:11:32 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/11 13:42:53 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -171,7 +171,7 @@ def choose_function(
 ) -> tuple[str, list[int]]:
     """Return the chosen function name and the updated context ids."""
     if not functions:
-        raise ValueError("no function available")
+        raise ValueError("No function available")
     text = build_context(functions, prompt)
     context_ids: list[int] = model.encode(text).squeeze(0).tolist()
     names = [f.name for f in functions]

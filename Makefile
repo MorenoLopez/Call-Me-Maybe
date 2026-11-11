@@ -6,7 +6,7 @@
 #    By: horarivo <horarivo@student.42antananari    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/10/20 09:58:02 by horarivo          #+#    #+#              #
-#    Updated: 2026/11/01 18:11:43 by horarivo         ###   ########.fr        #
+#    Updated: 2026/11/11 14:34:48 by horarivo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,12 +30,12 @@ clean:
 
 
 lint:
-	flake8 src/
-	mypy src/ --warn-return-any --warn-unused-ignores \
+	uv run flake8 src/
+	uv run mypy src/ --warn-return-any --warn-unused-ignores \
 		--ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
 lint-strict:
-	flake8 src/
-	mypy src/ --strict
+	uv run flake8 src/
+	uv run mypy src/ --strict
 
 .PHONY: install run debug clean lint lint-strict
