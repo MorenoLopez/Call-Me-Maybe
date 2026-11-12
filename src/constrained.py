@@ -7,7 +7,7 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/31 18:29:49 by horarivo            #+#    #+#            #
-#   Updated: 2026/11/11 15:49:57 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/12 15:37:10 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -78,19 +78,6 @@ class TokenSets(BaseModel):
             newline=newline,
         )
 
-
-# def build_context(functions: list[FunctionDefinition], prompt: str) -> str:
-#     """Build the text given to the model before the answer."""
-#     system = [
-#         "Choose the function that best answers the user request.",
-#         "",
-#         "Available functions:",
-#     ]
-#     for f in functions:
-#         params = ", ".join(f"{n}: {p.type}" for n, p in f.parameters.items())
-#         system.append(f"- {f.name}({params}): {f.description}")
-#     system += ["", f"User request: {prompt}", "", "Function to call:", ""]
-#     return "\n".join(system)
 
 def build_context(functions: list[FunctionDefinition], prompt: str) -> str:
     """Build the ChatML-formatted prompt."""
