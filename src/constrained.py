@@ -7,7 +7,7 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/31 18:29:49 by horarivo            #+#    #+#            #
-#   Updated: 2026/11/11 13:42:53 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/11 15:49:57 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -103,7 +103,7 @@ def build_context(functions: list[FunctionDefinition], prompt: str) -> str:
         params = ", ".join(f"{n}: {p.type}" for n, p in f.parameters.items())
         system += f"- {f.name}({params}): {f.description}\n"
 
-    # Format ChatML de Qwen3 (enable_thinking=False)
+    # Format ChatML de Qwen3
     return (
         f"<|im_start|>system\n{system}<|im_end|>\n"
         f"<|im_start|>user\nUser request: {prompt}<|im_end|>\n"
