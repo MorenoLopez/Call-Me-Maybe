@@ -63,10 +63,10 @@ This guarantees that every generated token is structurally and semantically vali
 
 For each prompt, the pipeline runs in two phases.
 
-**Phase 1 — function selection**  
+**Phase 1 - function selection**  
 We build a context in ChatML format (the conversation format Qwen3 was trained on) containing the available functions and the user's prompt. We then generate the function name token by token, constraining the model at each step to only tokens that extend a valid function name from our list. When only one candidate remains, we complete the name without calling the model (a shortcut that saves a few inference calls).
 
-**Phase 2 — parameter generation**  
+**Phase 2 - parameter generation**  
 Once the function is known, we know its parameter names and types from `functions_definition.json`. We write the JSON skeleton ourselves (`{"param_name": `) and let the model fill in only the values, constrained by type:
 
 - **number**: only tokens made of digits, `.`, and `-`, such that the accumulated string remains a valid number prefix. Generation stops when the model picks a terminator token (`,` or `}`).
@@ -159,7 +159,7 @@ Expected output format:
 - [Qwen3 model card](https://huggingface.co/Qwen/Qwen3-0.6B)
 - [Qwen3 technical report](https://arxiv.org/abs/2505.09388)
 - [ChatML format documentation](https://huggingface.co/docs/transformers/chat_templating)
-- [Constrained decoding — survey paper](https://arxiv.org/abs/2406.06608)
+- [Constrained decoding - survey paper](https://arxiv.org/abs/2406.06608)
 - [JSON grammar for constrained generation (Outlines)](https://github.com/outlines-dev/outlines)
 - [BPE tokenization (original paper)](https://arxiv.org/abs/1508.07909)
 
