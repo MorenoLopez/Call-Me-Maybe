@@ -7,7 +7,7 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/20 09:42:35 by horarivo            #+#    #+#            #
-#   Updated: 2026/11/11 14:03:50 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/17 08:58:07 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -25,6 +25,7 @@ from .constrained import TokenSets, process_prompt
 from .models import FunctionDefinition, Output, Prompt
 from .utils import json_load, validate
 from .vocab import Vocab
+from .banner import print_banner
 
 CYAN = "\033[96m"
 GREEN = "\033[92m"
@@ -102,8 +103,15 @@ def main() -> int:
     except Exception as err:
         print(f"{RED}[ Error]{RESET} : {err}", file=sys.stderr)
         return 1
+    
+    try:
+        print("\033c", end="")
+    except Exception as err:
+        print(f"Trying to clear the screen... {err}")
+    print_banner(color=CYAN, reset=RESET)
 
     results: list[Output] = []
+    i = 0
     start = time.time()
     try:
         for i, p in enumerate(prompts, 1):
