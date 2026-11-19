@@ -7,7 +7,7 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/31 18:29:49 by horarivo            #+#    #+#            #
-#   Updated: 2026/11/19 23:39:27 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/20 00:06:23 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -31,7 +31,7 @@ CLOSER_TAIL = set(",}]: \n")
 NUMBER_PARTIAL = re.compile(r"^-?(\d+\.?\d*)?$")
 NUMBER_FULL = re.compile(r"^-?\d+(\.\d+)?$")
 MAX_NUMBER_TOKENS = 20
-MAX_STRING_TOKENS = 100
+MAX_STRING_TOKENS = 20
 
 
 class TokenSets(BaseModel):
@@ -246,8 +246,9 @@ def generate_parameters(
         if param.type == "string":
             prefix += '"'
         append_text(model, context_ids, prefix)
-        if param.type == "number":
-            result[pname] = generate_number(model, vocab, tokens, context_ids)
+        if param.type in ("number", "integer"):
+            value = generate_number(model, vocab, tokens, context_ids)
+            result[pname] = int(value) if param.type == "integer" else value
         elif param.type == "string":
             result[pname] = generate_string(model, vocab, tokens, context_ids)
         else:

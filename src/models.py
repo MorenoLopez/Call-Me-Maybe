@@ -7,7 +7,7 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/20 11:49:44 by horarivo            #+#    #+#            #
-#   Updated: 2026/11/19 23:17:13 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/20 00:02:59 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -15,7 +15,7 @@ from pydantic import BaseModel, ConfigDict
 from typing import Literal
 
 
-JsonType = Literal["boolean", "number", "string"]
+JsonType = Literal["boolean", "number", "string","integer"]
 
 
 class Parameter(BaseModel):
