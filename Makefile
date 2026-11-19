@@ -6,16 +6,13 @@
 #    By: horarivo <horarivo@student.42antananari    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/10/20 09:58:02 by horarivo          #+#    #+#              #
-#    Updated: 2026/11/11 14:34:48 by horarivo         ###   ########.fr        #
+#    Updated: 2026/11/19 19:26:31 by horarivo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 install:
 	uv sync
-
-test:
-	uv run python src/test.py --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calls.json
 
 run:
 	uv run python -m src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calls.json

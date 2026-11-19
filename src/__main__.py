@@ -7,7 +7,7 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/20 09:42:35 by horarivo            #+#    #+#            #
-#   Updated: 2026/11/17 08:58:07 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/19 19:23:01 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -103,7 +103,7 @@ def main() -> int:
     except Exception as err:
         print(f"{RED}[ Error]{RESET} : {err}", file=sys.stderr)
         return 1
-    
+
     try:
         print("\033c", end="")
     except Exception as err:
