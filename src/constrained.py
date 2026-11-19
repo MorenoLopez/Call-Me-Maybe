@@ -7,7 +7,7 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/31 18:29:49 by horarivo            #+#    #+#            #
-#   Updated: 2026/11/12 15:37:10 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/19 23:39:27 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -242,7 +242,7 @@ def generate_parameters(
         return {}
     result: dict[str, Any] = {}
     for i, (pname, param) in enumerate(func.parameters.items()):
-        prefix = ("{" if i == 0 else ", ") + json.dumps(pname) + ": "
+        prefix = ("{" if i == 0 else ", ") + json.dumps(pname) + ":"
         if param.type == "string":
             prefix += '"'
         append_text(model, context_ids, prefix)

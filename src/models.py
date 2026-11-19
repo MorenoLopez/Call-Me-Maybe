@@ -7,11 +7,11 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/20 11:49:44 by horarivo            #+#    #+#            #
-#   Updated: 2026/11/07 06:26:38 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/19 23:17:13 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Literal
 
 
@@ -20,16 +20,19 @@ JsonType = Literal["boolean", "number", "string"]
 
 class Parameter(BaseModel):
     """function parameter"""
+    model_config = ConfigDict(extra="forbid")
     type: JsonType
 
 
 class ReturnType(BaseModel):
     """Return type"""
+    model_config = ConfigDict(extra="forbid")
     type: JsonType
 
 
 class FunctionDefinition(BaseModel):
     """Function Definition"""
+    model_config = ConfigDict(extra="forbid")
     name: str
     description: str
     parameters: dict[str, Parameter]
@@ -38,6 +41,7 @@ class FunctionDefinition(BaseModel):
 
 class Prompt(BaseModel):
     """Prompt Entry"""
+    model_config = ConfigDict(extra="forbid")
     prompt: str
 
 
