@@ -84,6 +84,8 @@ At startup we decode every token id once using `model.decode([id])` and store th
 - **Skeleton written by us, values by the model**: we never ask the model to produce `{`, `"`, `:`, or key names. This eliminates the main source of JSON errors in small models.
 - **One model load per run**: `Small_LLM_Model`, `Vocab`, and `TokenSets` are built once before the prompt loop. Each prompt failure is caught individually, so one bad prompt does not stop the rest.
 - **No private SDK attributes**: only the four public methods of `Small_LLM_Model` are used (`encode`, `decode`, `get_logits_from_input_ids`, `get_path_to_vocab_file`).
+- **Strict input validation**: all pydantic models use `extra = "forbid"`, so any unknown field in the input JSON files raises a clear validation error instead of being silently ignored.
+- **`integer` type support**: treated identically to `number` during generation, then cast to `int` before storing the result.
 
 ## Performance analysis
 
@@ -98,9 +100,11 @@ Measured on the provided 11-prompt test set:
 Each token generation requires one full forward pass of the model on the entire context. There is no KV cache available through the SDK, so longer contexts cost more. The 5-minute limit comfortably covers the provided test set; with larger sets or longer function lists, context length becomes the bottleneck.
 
 **Known limitations**:
-- Negative numbers in arguments may not be extracted correctly: the model tends to ignore the leading `-` sign.
-- String values that should start with a space are generated without it.
+
+- Negative numbers in arguments are not extracted correctly: removing the space after `:` in the JSON skeleton fixes negative numbers but causes the model to generate aberrant, repetitive regex patterns (e.g. `\d+\s+\d+\s+...` looping up to the token limit). With the space restored, regex patterns are correct but negative numbers lose their `-` sign. The space was kept, since regex correctness affects more prompts.
+- String values that should start with a space are generated without it: the first token of a string is filtered to exclude tokens starting with a space, to avoid a leading space artifact.
 - Multi-byte Unicode characters split across tokens (e.g. some emoji) cannot appear in generated strings.
+- `integer` parameter type is supported: values are generated as numbers and truncated to `int`.
 
 ## Challenges faced
 
@@ -115,6 +119,7 @@ Manual testing against the provided 11-prompt set after each change, checking:
 - correct function name for every prompt,
 - correct argument types (number, string, boolean),
 - JSON validity of the output file.
+- Edge cases tested: empty parameter list, negative numbers (known limitation), floating-point numbers, integer parameters, strings with apostrophes, strings with regex special characters, extra fields in input JSON (rejected by pydantic).
 
 Edge cases tested: empty parameter list, negative numbers, floating-point numbers, strings with apostrophes, strings with regex special characters.
 
@@ -170,3 +175,13 @@ AI was used throughout this project as a guided assistant:
 - reviewing Python code for correctness (import errors, type annotations),
 - debugging runtime errors (squeeze, relative imports, local package installation),
 - improving README.
+
+
+
+## May be useful
+Just add these lines in the `~/.zshrc` file if storage in the home forlder is missing :
+```
+export UV_CACHE_DIR=/home/horarivo/sgoinfre/.uv-cache
+export HF_HOME=/home/$USER/sgoinfre/.cache/huggingface
+export UV_PROJECT_ENVIRONMENT=~/sgoinfre/cmm-venv
+```
