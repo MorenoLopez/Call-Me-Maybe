@@ -15,7 +15,7 @@ from pydantic import BaseModel, ConfigDict
 from typing import Literal
 
 
-JsonType = Literal["boolean", "number", "string","integer"]
+JsonType = Literal["boolean", "number", "string", "integer"]
 
 
 class Parameter(BaseModel):
