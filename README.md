@@ -23,7 +23,7 @@ Clone the repository, then run:
 uv sync
 ```
 
-This installs all dependencies, including `llm_sdk` from the local directory, `pydantic`, and `numpy`.
+This installs all dependencies, including `llm_sdk` from the local directory, `pydantic`, `flake8`, and `mypy`.
 
 ### Running the program
 
