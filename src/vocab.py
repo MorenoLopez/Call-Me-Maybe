@@ -7,7 +7,7 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/26 08:15:11 by horarivo            #+#    #+#            #
-#   Updated: 2026/10/26 09:02:39 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/22 07:41:00 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -44,6 +44,3 @@ class Vocab(BaseModel):
 
     def text_of(self, token_id: int) -> str:
         return self.id_to_text[token_id]
-
-    def is_usable(self, token_id: int) -> bool:
-        return token_id in self.id_to_text

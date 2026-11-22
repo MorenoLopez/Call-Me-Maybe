@@ -7,7 +7,7 @@
 #   By: horarivo <horarivo@student.42antananarivo.   +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/31 18:29:49 by horarivo            #+#    #+#            #
-#   Updated: 2026/11/20 00:06:23 by horarivo           ###   ########.fr      #
+#   Updated: 2026/11/22 07:31:12 by horarivo           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -90,7 +90,7 @@ def build_context(functions: list[FunctionDefinition], prompt: str) -> str:
         params = ", ".join(f"{n}: {p.type}" for n, p in f.parameters.items())
         system += f"- {f.name}({params}): {f.description}\n"
 
-    # Format ChatML de Qwen3
+    # ChatML format for Qwen3
     return (
         f"<|im_start|>system\n{system}<|im_end|>\n"
         f"<|im_start|>user\nUser request: {prompt}<|im_end|>\n"
@@ -126,7 +126,6 @@ def choose_from_list(
         if so_far in options and not extendable:
             return so_far
         if so_far not in options and len(extendable) == 1:
-            # only one candidate left: no choice, complete it ourselves
             append_text(model, context_ids, extendable[0][len(so_far):])
             return extendable[0]
 

@@ -6,7 +6,7 @@
 #    By: horarivo <horarivo@student.42antananari    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/10/20 09:58:02 by horarivo          #+#    #+#              #
-#    Updated: 2026/11/19 19:26:31 by horarivo         ###   ########.fr        #
+#    Updated: 2026/11/22 07:38:24 by horarivo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,10 +15,10 @@ install:
 	uv sync
 
 run:
-	uv run python -m src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calls.json
+	uv run python -m src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calling_results.json
 
 debug:
-	uv run python -m pdb src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calls.json
+	uv run python -m pdb src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calling_results.json
 
 clean:
 	rm -rf __pycache__ .mypy_cache .pytest_cache
