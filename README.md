@@ -181,7 +181,7 @@ AI was used throughout this project as a guided assistant:
 ## May be useful
 Just add these lines in the `~/.zshrc` file if storage in the home forlder is missing :
 ```
-export UV_CACHE_DIR=/home/horarivo/sgoinfre/.uv-cache
+export UV_CACHE_DIR=/home/$USER/sgoinfre/.uv-cache
 export HF_HOME=/home/$USER/sgoinfre/.cache/huggingface
 export UV_PROJECT_ENVIRONMENT=~/sgoinfre/cmm-venv
 ```
